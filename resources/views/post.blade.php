@@ -6,7 +6,7 @@
       {{ $post->title; }}
     </h1>
     <p>
-      <a href="$">{{$post->category->name}}</a>
+      By <a href="">{{$post->user->name}}</a> <a href="/categories/{{$post->category->slug}}">{{$post->category->name}}</a>
     </p>
     <div>
       {!! $post->body !!}
