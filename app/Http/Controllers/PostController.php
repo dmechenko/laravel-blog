@@ -19,22 +19,22 @@ class PostController extends Controller
         //         ->orWhere('author', 'like', '%' . request('search') . '%');
         // }
 
-        return view('posts', [
+        return view('posts.index', [
             'posts' => $this->getPosts(),
-            'categories' => Category::all(),
+            // 'categories' => Category::all(),
             'currentCategory' => Category::firstWhere('slug', request('category'))
         ]);
     }
 
     public function show(Post $post)
     {
-        return view('post', [
+        return view('posts.show', [
             'post' => $post
         ]);
     }
 
     protected function getPosts()
     {
-        return Post::latest()->filter(request(['search', 'category']))->get();
+        return Post::latest()->filter(request(['search', 'category', 'author']))->get();
     }
 }
