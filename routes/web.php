@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\PostController;
 use Illuminate\Support\Facades\Route;
 use App\Models\Post;
 use App\Models\Category;
@@ -18,19 +19,23 @@ use Spatie\YamlFrontMatter\YamlFrontMatter;
 |
 */
 
-Route::get('/', function () {
-    return view('posts', [
-        'posts' => Post::latest()->get(),
-        'categories' => Category::all()
-        // 'posts' => Post::latest()->with('category', 'author')->get()
-    ]);
-})->name('home');
+// Route::get('/', function () {
+//     return view('posts', [
+//         'posts' => Post::latest()->get(),
+//         'categories' => Category::all()
+//         // 'posts' => Post::latest()->with('category', 'author')->get()
+//     ]);
+// })->name('home');
 
-Route::get('posts/{post:slug}', function (Post $post){
-    return view('post', [
-        'post' => $post
-    ]);
-});
+Route::get('/', [PostController::class, 'index'])->name('home');
+
+// Route::get('posts/{post:slug}', function (Post $post){
+//     return view('post', [
+//         'post' => $post
+//     ]);
+// });
+
+Route::get('posts/{post:slug}', [PostController::class, 'show']);
 
 Route::get('categories/{category:slug}', function(Category $category){
     return view('posts', [
