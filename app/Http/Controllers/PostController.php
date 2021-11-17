@@ -21,7 +21,8 @@ class PostController extends Controller
 
         return view('posts', [
             'posts' => $this->getPosts(),
-            'categories' => Category::all()
+            'categories' => Category::all(),
+            'currentCategory' => Category::firstWhere('slug', request('category'))
         ]);
     }
 
@@ -34,6 +35,6 @@ class PostController extends Controller
 
     protected function getPosts()
     {
-        return Post::latest()->filter(request(['search']))->get();
+        return Post::latest()->filter(request(['search', 'category']))->get();
     }
 }
