@@ -17,6 +17,7 @@ class Post extends Model
     protected $with = ['category', 'author'];
 
     public function scopeFilter($query, array $filters)
+    //search functionality
     {   
         $query->when($filters['search'] ?? false, function($query, $search) {
             $query->where(fn($query) =>
