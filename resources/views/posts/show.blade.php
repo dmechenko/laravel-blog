@@ -48,23 +48,32 @@
                     </div>
                 </div>
                 <section class="mt-5 col-span-8 col-start-5 mt-10 space-y-6">
-                    <x-panel>
-                        <form action="" method="post">
-                            @csrf
-                            <header class="flex items-center">
-                                <img src="https://i.pravatar.cc/100?u={{ auth()->id() }}" alt="" width="40" height="40" class="rounded-full">
-                                <h2 class="ml-4">Want to participate?</h2>
-                            </header>
-                            <div class="mt-5">
-                                <textarea class="w-full text-sm focus:outline-none focus:ring" name="body" cols="30" rows="10" placeholder="Quick! Think of something to say."></textarea>
-                            </div>
-                            <div class="flex justify-end">
-                                <button type="submit" class="bg-blue-500 rounded text-white py-2 uppercase font-semibold px-10 hover:bg-blue-600">
-                                    Post
-                                </button>
-                            </div>
-                        </form>
-                    </x-panel>
+                    @auth
+                        <x-panel>
+                            <form action="/posts/{{ $post->slug }}/comments" method="post">
+                                @csrf
+                                <header class="flex items-center">
+                                    <img src="https://i.pravatar.cc/100?u={{ auth()->id() }}" alt="" width="40" height="40" class="rounded-full">
+                                    <h2 class="ml-4">Want to participate?</h2>
+                                </header>
+                                <div class="mt-5">
+                                    <textarea class="w-full text-sm focus:outline-none focus:ring" name="body" cols="30" rows="10" placeholder="Quick! Think of something to say." required></textarea>
+                                    @error('body')
+                                        <span class="text-sm text-red-100">{{$message}}</span>
+                                    @enderror
+                                </div>
+                                <div class="flex justify-end">
+                                    <button type="submit" class="bg-blue-500 rounded text-white py-2 uppercase font-semibold px-10 hover:bg-blue-600">
+                                        Post
+                                    </button>
+                                </div>
+                            </form>
+                        </x-panel>
+                    @else
+                        <p>
+                            <a href="/register" class="text-blue-500">Register</a> or <a href="/login" class="text-blue-500">Log in</a> to comment.
+                        </p>
+                    @endauth
 
                     @foreach ($post->comments as $comment)
                         <x-post-comment :comment='$comment' />
