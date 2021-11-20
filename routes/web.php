@@ -8,8 +8,10 @@ use Illuminate\Support\Facades\Route;
 use App\Models\Post;
 use App\Models\Category;
 use App\Models\User;
+use App\services\Newsletter;
 use Illuminate\Support\Facades\File;
 use Spatie\YamlFrontMatter\YamlFrontMatter;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -66,4 +68,17 @@ Route::post('login', [SessionsController::class, 'store'])->middleware('guest');
 Route::post('logout', [SessionsController::class, 'destroy'])->middleware('auth');
 
 Route::post('posts/{post:slug}/comments', [PostCommentsController::class, 'store']);
+
+Route::post('newsletter', function(Newsletter $newsletter) {
+  request()->validate(['email' => "required|email"]);
+
+  try {
+    $newsletter->subscribe(request('email'));
+  } catch (\Exception $e) {
+    \Illuminate\Validation\ValidationException::withMessages([
+      'email' => 'This email could not be added.'
+    ]);
+  }
+  return redirect('/')->with('success', "You're now signed up for our newsletter!");
+});
 
