@@ -82,3 +82,5 @@ Route::post('newsletter', function(Newsletter $newsletter) {
   return redirect('/')->with('success', "You're now signed up for our newsletter!");
 });
 
+Route::get('admin/posts/create', [PostController::class, 'create'])->middleware('admin');
+
