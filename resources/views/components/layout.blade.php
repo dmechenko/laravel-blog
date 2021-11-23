@@ -26,11 +26,25 @@
                     <a href="/register" class="text-xs font-bold uppercase">Register</a>
                     <a href="/login" class="ml-3 text-xs font-bold uppercase">Log In</a>
                 @else
-                    <span class="text-sm font-bold uppercase"> Hey, {{ auth()->user()->name }}!</span>
-                    <form action="/logout" method="post" class="text-sm font-semibold text-blue-500 ml-5">
-                        @csrf
-                        <button type="submit">Log Out</button>
-                    </form>
+                    <x-dropdown>
+                        <x-slot name="trigger">
+                            <button class="text-sm font-bold uppercase"> Hey, {{ auth()->user()->name }}!</button>
+                        </x-slot>
+                        @if (auth()->user()->can('admin'))
+                            <x-dropdown-item href="/admin/posts" :active="request()->is('admin/posts')">
+                                Dashboard
+                            </x-dropdown-item>
+                            <x-dropdown-item href="/admin/posts/create" :active="request()->is('admin/posts/create')">
+                                New Post
+                            </x-dropdown-item>
+                        @endif
+                        <x-dropdown-item href="#" x-data="{}" @click.prevent="document.querySelector('#logout-form').submit()">
+                            Log Out
+                        </x-dropdown-item>
+                        <form id="logout-form" action="/logout" method="post" class="hidden">
+                            @csrf
+                        </form>
+                    </x-dropdown>
                 @endguest
                 <a href="#newsletter" class="bg-blue-500 ml-3 rounded-full text-xs font-semibold text-white uppercase py-3 px-5">
                     Subscribe for Updates
